@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		7AE6E6EC2280EE0E009D1B97 /* Weave.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE6E6E22280EE0E009D1B97 /* Weave.framework */; };
-		7AE6E6F12280EE0E009D1B97 /* WeaveTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6E6F02280EE0E009D1B97 /* WeaveTests.swift */; };
 		7AE6E6F32280EE0E009D1B97 /* Weave.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE6E6E52280EE0E009D1B97 /* Weave.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7AE6E6FD2280EE39009D1B97 /* WVRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6E6FC2280EE39009D1B97 /* WVRequest.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -27,8 +27,7 @@
 		7AE6E6E52280EE0E009D1B97 /* Weave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Weave.h; sourceTree = "<group>"; };
 		7AE6E6E62280EE0E009D1B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE6E6EB2280EE0E009D1B97 /* WeaveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeaveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		7AE6E6F02280EE0E009D1B97 /* WeaveTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeaveTests.swift; sourceTree = "<group>"; };
-		7AE6E6F22280EE0E009D1B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7AE6E6FC2280EE39009D1B97 /* WVRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVRequest.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				7AE6E6E42280EE0E009D1B97 /* Weave */,
-				7AE6E6EF2280EE0E009D1B97 /* WeaveTests */,
 				7AE6E6E32280EE0E009D1B97 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -73,17 +71,9 @@
 			children = (
 				7AE6E6E52280EE0E009D1B97 /* Weave.h */,
 				7AE6E6E62280EE0E009D1B97 /* Info.plist */,
+				7AE6E6FC2280EE39009D1B97 /* WVRequest.swift */,
 			);
 			path = Weave;
-			sourceTree = "<group>";
-		};
-		7AE6E6EF2280EE0E009D1B97 /* WeaveTests */ = {
-			isa = PBXGroup;
-			children = (
-				7AE6E6F02280EE0E009D1B97 /* WeaveTests.swift */,
-				7AE6E6F22280EE0E009D1B97 /* Info.plist */,
-			);
-			path = WeaveTests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -148,6 +138,7 @@
 				TargetAttributes = {
 					7AE6E6E12280EE0E009D1B97 = {
 						CreatedOnToolsVersion = 10.2.1;
+						LastSwiftMigration = 1020;
 					};
 					7AE6E6EA2280EE0E009D1B97 = {
 						CreatedOnToolsVersion = 10.2.1;
@@ -194,6 +185,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AE6E6FD2280EE39009D1B97 /* WVRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -201,7 +193,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AE6E6F12280EE0E009D1B97 /* WeaveTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -341,6 +332,7 @@
 		7AE6E6F72280EE0E009D1B97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -358,6 +350,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.hobbsome.Weave;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -366,6 +359,7 @@
 		7AE6E6F82280EE0E009D1B97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "";
 				CODE_SIGN_STYLE = Automatic;
 				DEFINES_MODULE = YES;
@@ -391,6 +385,7 @@
 		7AE6E6FA2280EE0E009D1B97 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QX8TN8XC83;
 				INFOPLIST_FILE = WeaveTests/Info.plist;
@@ -409,6 +404,7 @@
 		7AE6E6FB2280EE0E009D1B97 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = QX8TN8XC83;
 				INFOPLIST_FILE = WeaveTests/Info.plist;

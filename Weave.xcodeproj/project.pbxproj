@@ -10,6 +10,7 @@
 		7AE6E6EC2280EE0E009D1B97 /* Weave.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AE6E6E22280EE0E009D1B97 /* Weave.framework */; };
 		7AE6E6F32280EE0E009D1B97 /* Weave.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE6E6E52280EE0E009D1B97 /* Weave.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AE6E6FD2280EE39009D1B97 /* WVRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE6E6FC2280EE39009D1B97 /* WVRequest.swift */; };
+		7AFBEE24228101BB0042E31E /* WVSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AFBEE23228101BB0042E31E /* WVSession.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -28,6 +29,7 @@
 		7AE6E6E62280EE0E009D1B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7AE6E6EB2280EE0E009D1B97 /* WeaveTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WeaveTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE6E6FC2280EE39009D1B97 /* WVRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVRequest.swift; sourceTree = "<group>"; };
+		7AFBEE23228101BB0042E31E /* WVSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVSession.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 				7AE6E6E52280EE0E009D1B97 /* Weave.h */,
 				7AE6E6E62280EE0E009D1B97 /* Info.plist */,
 				7AE6E6FC2280EE39009D1B97 /* WVRequest.swift */,
+				7AFBEE23228101BB0042E31E /* WVSession.swift */,
 			);
 			path = Weave;
 			sourceTree = "<group>";
@@ -186,6 +189,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AE6E6FD2280EE39009D1B97 /* WVRequest.swift in Sources */,
+				7AFBEE24228101BB0042E31E /* WVSession.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

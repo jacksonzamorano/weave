@@ -71,10 +71,24 @@ public class WVRequest {
     }
     
     //#MARK:- GET Requests
+    public func getData(finished comp:@escaping (WVResponse)->Void) {
+        let request = createURLRequest(methodType: .get)
+        let task = session.dataTask(with: request) { (data, response, error) in
+            let res = WVResponse()
+            res.data = data
+            res.statusCode = (response as? HTTPURLResponse)?.statusCode
+            DispatchQueue.main.async {
+                comp(res)
+            }
+        }
+        task.resume()
+    }
     public func getString(finished comp:@escaping (WVStringResponse)->Void) {
         let request = createURLRequest(methodType: .get)
         let task = session.dataTask(with: request) { (data, response, error) in
-            comp(self.parseString(data: data, response: response))
+            DispatchQueue.main.async {
+                comp(self.parseString(data: data, response: response))
+            }
         }
         task.resume()
     }
@@ -83,23 +97,44 @@ public class WVRequest {
         let task = session.dataTask(with: request) { (data, response, error) in
             if (response as? HTTPURLResponse)?.statusCode != 200 {
                 if decodeIfFaliure {
-                    comp(self.parseJSON(data: data, response: response))
+                    DispatchQueue.main.async {
+                        comp(self.parseJSON(data: data, response: response))
+                    }
                 } else {
-                    comp(self.parseJSONError(data: data, status: (response as? HTTPURLResponse)?.statusCode))
+                    DispatchQueue.main.async {
+                        comp(self.parseJSONError(data: data, status: (response as? HTTPURLResponse)?.statusCode))
+                    }
                 }
             } else {
-                comp(self.parseJSON(data: data, response: response))
+                DispatchQueue.main.async {
+                    comp(self.parseJSON(data: data, response: response))
+                }
             }
         }
         task.resume()
     }
     //#MARK:- POST Requests
+    public func post(parameters:[String:Encodable], finished comp:@escaping (WVResponse)->Void = {_ in}) {
+        var request = createURLRequest(methodType: .post)
+        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpBody = parameters.percentEscaped().data(using: .utf8)
+        let task = session.dataTask(with: request) { (data, response, error) in
+            let res = WVResponse()
+            res.statusCode = (response as? HTTPURLResponse)?.statusCode
+            DispatchQueue.main.async {
+                comp(res)
+            }
+        }
+        task.resume()
+    }
     public func postString(parameters:[String:Encodable] = [:], finished comp:@escaping (WVStringResponse)->Void) {
         var request = createURLRequest(methodType: .post)
         request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
         let task = session.dataTask(with: request) { (data, response, error) in
-            comp(self.parseString(data: data, response: response))
+            DispatchQueue.main.async {
+                comp(self.parseString(data: data, response: response))
+            }
         }
         task.resume()
     }
@@ -110,12 +145,18 @@ public class WVRequest {
         let task = session.dataTask(with: request) { (data, response, error) in
             if (response as? HTTPURLResponse)?.statusCode != 200 {
                 if decodeIfFaliure {
-                    comp(self.parseJSON(data: data, response: response))
+                    DispatchQueue.main.async {
+                        comp(self.parseJSON(data: data, response: response))
+                    }
                 } else {
-                    comp(self.parseJSONError(data: data, status: (response as? HTTPURLResponse)?.statusCode))
+                    DispatchQueue.main.async {
+                        comp(self.parseJSONError(data: data, status: (response as? HTTPURLResponse)?.statusCode))
+                    }
                 }
             } else {
-                comp(self.parseJSON(data: data, response: response))
+                DispatchQueue.main.async {
+                    comp(self.parseJSON(data: data, response: response))
+                }
             }
         }
         task.resume()
@@ -128,7 +169,7 @@ public enum WVRequestType:String {
 //#MARK:- Response
 public class WVResponse {
     public var statusCode:Int?
-    var data:Data?
+    public var data:Data?
     public var success:Bool {
         get {
             return statusCode == 200

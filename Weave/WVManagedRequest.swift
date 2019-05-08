@@ -75,8 +75,8 @@ public class WVResponse {
     }
 }
 public class WVParsedResponse:WVResponse {
-    var parseSuccess = false
-    var parseResult:Any?
+    public var parseSuccess = false
+    public var parseResult:Any?
 }
 public class WVStringResponse:WVParsedResponse {
     public var string:String = ""

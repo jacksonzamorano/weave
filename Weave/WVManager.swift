@@ -1,14 +1,18 @@
 import Foundation
-class WVManager {
+public class WVManager {
     
-    var baseParamaters:[String:Encodable] = [:]
-    var baseURL:URL
-    var session:URLSession = URLSession.shared
+    public var baseParamaters:[String:Encodable] = [:]
+    public var baseURL:URL
+    public var session:URLSession = URLSession.shared
     
-    init(baseURL base:URL) {
+    public init(baseURL base:URL) {
         self.baseURL = base
     }
-    func createRequest(forEndpoint end:String, requestType type:WVRequestType = .get, outputType ot:WVOutputType = .string, parameters param:[String:Encodable]) -> WVManagedRequest {
+    public init(baseURL base:URL, baseParameters pm:[String:Encodable]) {
+        self.baseURL = base
+        self.baseParamaters = pm
+    }
+    public func createRequest(forEndpoint end:String, requestType type:WVRequestType = .get, outputType ot:WVOutputType = .string, parameters param:[String:Encodable]) -> WVManagedRequest {
         var point = end
         if point.first == "/" {
             point.removeFirst()
@@ -17,4 +21,5 @@ class WVManager {
         request.parameters = param
         return request
     }
+    
 }

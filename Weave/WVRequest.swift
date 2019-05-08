@@ -163,23 +163,5 @@ public class WVRequest {
     }
     
 }
-public enum WVRequestType:String {
-    case get = "GET", post = "POST"
-}
+
 //#MARK:- Response
-public class WVResponse {
-    public var statusCode:Int?
-    public var data:Data?
-    public var success:Bool {
-        get {
-            return statusCode == 200
-        }
-    }
-}
-public class WVStringResponse:WVResponse {
-    public var string:String = ""
-}
-public class WVJSONResponse:WVResponse {
-    public var json:NSDictionary = [:]
-    public var error:String?
-}

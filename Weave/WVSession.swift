@@ -1,5 +1,4 @@
 import UIKit
-
 public class WVSession {
     var root:URL
     public init(withRootURL rt:URL) {

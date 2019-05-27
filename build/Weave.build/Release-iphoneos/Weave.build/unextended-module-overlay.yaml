@@ -1,0 +1,13 @@
+{
+  'version': 0,
+  'case-sensitive': 'false',
+  'roots': [{
+    'type': 'directory',
+    'name': "/Users/jackson/Documents/Weave/build/Release-iphoneos/Weave.framework/Modules"
+    'contents': [{
+      'type': 'file',
+      'name': "module.modulemap",
+      'external-contents': "/Users/jackson/Documents/Weave/build/Weave.build/Release-iphoneos/Weave.build/unextended-module.modulemap",
+    }]
+  }]
+}

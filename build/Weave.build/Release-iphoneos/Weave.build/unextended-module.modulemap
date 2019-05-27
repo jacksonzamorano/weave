@@ -1,0 +1,10 @@
+framework module Weave {
+  umbrella header "Weave.h"
+
+  export *
+  module * { export * }
+}
+
+module Weave.__Swift {
+    exclude header "Weave-Swift.h"
+}

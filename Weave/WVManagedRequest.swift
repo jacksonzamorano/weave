@@ -1,31 +1,56 @@
 import Foundation
+/**
+ The main class to make requests with. This can't be created from this class; instead, create a request from a `WVManager`.
+ */
 public class WVManagedRequest {
-    public var type:WVRequestType = .get
-    public var output:WVOutputType = .string
+    /**
+     The HTTP request type.
+     */
+    public var requestType:WVRequestType = .get
+    /**
+     The type of response to return.
+     */
+    public var outputType:WVOutputType = .string
+    /**
+     HTTP body parameters.
+     */
     public var parameters:[String:Encodable] = [:]
+    /**
+     HTTP headers.
+     */
+    public var headers:[String:String] = [:]
+    /**
+     The request URL.
+     */
     public var url:URL
-    var timeoutInterval:TimeInterval = 10
+    /**
+     Number of seconds to try requesting for. Defaults to `10`.
+     */
+    public var timeoutInterval:TimeInterval = 10
     var manager:WVManager
     init(requestURL req:URL, requestType rt:WVRequestType = .get, outputType ot:WVOutputType, manager mg:WVManager) {
         self.url = req
         self.manager = mg
-        self.type = rt
-        self.output = ot
+        self.requestType = rt
+        self.outputType = ot
     }
-    
+/**
+     Starts the HTTP(S) request to the endpoint specified.
+     - Parameter finishHandler: After the request finishes, this gets called.
+     - Returns: void
+ */
     public func start(finishHandler fin: @escaping (WVResponse)->Void) {
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeoutInterval)
-        request.httpMethod = type.rawValue
-        if type == .post {
-            var combinedParameters = parameters
-            for i in manager.baseParamaters {
-                combinedParameters[i.key] = i.value
-            }
-            request.httpBody = combinedParameters.percentEscaped().data(using: .utf8)
+        request.httpMethod = requestType.rawValue
+        request.allHTTPHeaderFields = headers
+        var combinedParameters = parameters
+        for i in manager.baseParameters {
+            combinedParameters[i.key] = i.value
         }
+        request.httpBody = combinedParameters.percentEscaped().data(using: .utf8)
         manager.session.dataTask(with: request) { (data, response, error) in
             let status = (response as? HTTPURLResponse)?.statusCode
-            switch self.output {
+            switch self.outputType {
             case .raw:
                 let res = WVResponse()
                 res.statusCode = status
@@ -59,29 +84,84 @@ public class WVManagedRequest {
     
     
 }
+/**
+ Describes the type of request to be made.
+ */
 public enum WVRequestType:String {
-    case get = "GET", post = "POST"
+    /**
+     A HTTP request type.
+     */
+    case get = "GET", post = "POST", patch = "PATCH", put = "PUT"
 }
+/**
+ Describes the type of output to be made.
+ - `.raw` returns a `WVResponse`
+ - `.string` returns a `WVStringResponse`
+ - `.json` returns a `WVJSONResponse`
+ */
 public enum WVOutputType {
-    case string,json,raw
+    /**
+     Indicates a `WVStringResponse`.
+     */
+    case string
+    /**
+     Indicates a `WVJSONResponse`.
+     */
+    case json
+    /**
+     Indicates a `WVResponse`.
+     */
+    case raw
 }
+/**
+ A class that is a response from a request. This is a base class for many other response subclasses.
+ */
 public class WVResponse {
+    /**
+     The status code, if the request succeeded.
+     */
     public var statusCode:Int?
+    /**
+     The raw data recieved from the request.
+     */
     public var data:Data?
+    /**
+     A shorthand of `statusCode == 200`.
+     */
     public var success:Bool {
         get {
             return statusCode == 200
         }
     }
 }
+/**
+ A subclass of WVResponse designed to handle responses that need to be parsed or formatted.
+ */
 public class WVParsedResponse:WVResponse {
+    /**
+     Is true if the parse succeeded.
+     */
     public var parseSuccess = false
+    /**
+     Subclasses of this class can provide anything here. See documentation for the individual parser.
+     */
     public var parseResult:Any?
 }
+/**
+ A WVParsedResponse for parsing responses into strings.
+ */
 public class WVStringResponse:WVParsedResponse {
+    /**
+     The string value after parsing.
+     */
     public var string:String = ""
 }
+/**
+ A WVParsedResponse for parsing responses into JSON objects.
+ */
 public class WVJSONResponse:WVParsedResponse {
-    public var json:NSDictionary = [:]
-    public var error:String?
+    /**
+     The JSON object after parsing. Depending on the API, you will need to cast this into an array or dictionary.
+     */
+    public var json:Any? = nil
 }

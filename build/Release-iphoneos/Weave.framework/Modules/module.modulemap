@@ -1,0 +1,11 @@
+framework module Weave {
+  umbrella header "Weave.h"
+
+  export *
+  module * { export * }
+}
+
+module Weave.Swift {
+    header "Weave-Swift.h"
+    requires objc
+}

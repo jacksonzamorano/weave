@@ -1,6 +1,12 @@
 {
   "warnings": [
-
+    {
+      "file": "/Users/jackson/Documents/Weave/Weave/WVManagedRequest.swift",
+      "line": 88,
+      "symbol": "WVRequest",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    }
   ],
   "source_directory": "/Users/jackson/Documents/Weave"
 }

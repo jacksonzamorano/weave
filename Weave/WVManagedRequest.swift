@@ -36,7 +36,8 @@ public class WVManagedRequest {
     }
 /**
      Starts the HTTP(S) request to the endpoint specified.
-     - Parameter finishHandler: After the request finishes, this gets called.
+     - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType`.
+
      - Returns: void
  */
     public func start(finishHandler fin: @escaping (WVResponse)->Void) {
@@ -83,6 +84,61 @@ public class WVManagedRequest {
     }
     
     
+}
+/**
+ The basic request class. Doesn't have any special bells or whistles. Can parse JSON and Strings.
+ */
+public class WVRequest {
+    static var session = URLSession.shared
+    /**
+     Starts the HTTP(S) request to the endpoint specified.
+     - Parameter url: After the request finishes, this gets called.
+     - Parameter requestType: The request type to make. Defaults to GET
+     - Parameter outputType: The request output type. Defaults to string.
+     - Parameter timeoutInterval: How long the request tries for. Defaults to 10 seconds.
+     - Parameter parameters: Any HTTP body to send. Defaults to bank.
+     - Parameter headers: Any HTTP headers to send. Defaults to blank.
+     - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType`.
+     - Returns: void
+     */
+    public static func request(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:], finishHandler fin: @escaping (WVResponse)->Void) {
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeoutInterval)
+        request.httpMethod = requestType.rawValue
+        request.allHTTPHeaderFields = headers
+        request.httpBody = parameters.percentEscaped().data(using: .utf8)
+        session.dataTask(with: request) { (data, response, error) in
+            let status = (response as? HTTPURLResponse)?.statusCode
+            switch outputType {
+            case .raw:
+                let res = WVResponse()
+                res.statusCode = status
+                res.data = data
+                fin(res)
+            case .string:
+                let res = WVStringResponse()
+                res.statusCode = status
+                res.data = data
+                if let d = data, let str = String(data: d, encoding: .utf8) {
+                    res.parseSuccess = true
+                    res.parseResult = str
+                } else {
+                    res.parseSuccess = false
+                }
+                fin(res)
+            case .json:
+                let res = WVJSONResponse()
+                res.statusCode = status
+                res.data = data
+                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) as? NSDictionary {
+                    res.parseSuccess = true
+                    res.parseResult = dict
+                } else {
+                    res.parseSuccess = false
+                }
+                fin(res)
+            }
+        }
+    }
 }
 /**
  Describes the type of request to be made.

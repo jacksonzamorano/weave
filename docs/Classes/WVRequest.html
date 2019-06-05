@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>WVRequest Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/WVRequest" class="dashAnchor"></a>
+
+    <a title="WVRequest Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          Weave Docs
+        </a>
+         (100% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">Weave Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      WVRequest Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVJSONResponse.html">WVJSONResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVManagedRequest.html">WVManagedRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVManager.html">WVManager</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVParsedResponse.html">WVParsedResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVRequest.html">WVRequest</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVResponse.html">WVResponse</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/WVStringResponse.html">WVStringResponse</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/WVOutputType.html">WVOutputType</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/WVRequestType.html">WVRequestType</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>WVRequest</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">WVRequest</span></code></pre>
+
+                </div>
+              </div>
+            <p>The basic request class. Doesn&rsquo;t have any special bells or whistles. Can parse JSON and Strings.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:5Weave9WVRequestC7request3url0C4Type06outputE015timeoutInterval10parameters7headers13finishHandlery10Foundation3URLV_AA0bE0OAA08WVOutputE0OSdSDySSSE_pGSDyS2SGyAA10WVResponseCctFZ"></a>
+                    <a name="//apple_ref/swift/Method/request(url:requestType:outputType:timeoutInterval:parameters:headers:finishHandler:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:5Weave9WVRequestC7request3url0C4Type06outputE015timeoutInterval10parameters7headers13finishHandlery10Foundation3URLV_AA0bE0OAA08WVOutputE0OSdSDySSSE_pGSDyS2SGyAA10WVResponseCctFZ">request(url:requestType:outputType:timeoutInterval:parameters:headers:finishHandler:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Starts the HTTP(S) request to the endpoint specified.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kd">func</span> <span class="nf">request</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span><span class="kt">URL</span><span class="p">,</span> <span class="nv">requestType</span><span class="p">:</span><span class="kt"><a href="../Enums/WVRequestType.html">WVRequestType</a></span> <span class="o">=</span> <span class="o">.</span><span class="k">get</span><span class="p">,</span> <span class="nv">outputType</span><span class="p">:</span><span class="kt"><a href="../Enums/WVOutputType.html">WVOutputType</a></span> <span class="o">=</span> <span class="o">.</span><span class="n">string</span><span class="p">,</span> <span class="nv">timeoutInterval</span><span class="p">:</span><span class="kt">TimeInterval</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:[</span><span class="kt">String</span><span class="p">:</span><span class="kt">Encodable</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:],</span> <span class="nv">headers</span><span class="p">:[</span><span class="kt">String</span><span class="p">:</span><span class="kt">String</span><span class="p">]</span> <span class="o">=</span> <span class="p">[:],</span> <span class="n">finishHandler</span> <span class="nv">fin</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Classes/WVResponse.html">WVResponse</a></span><span class="p">)</span><span class="o">-&gt;</span><span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>url</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>After the request finishes, this gets called.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>requestType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The request type to make. Defaults to GET</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>outputType</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The request output type. Defaults to string.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>timeoutInterval</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>How long the request tries for. Defaults to 10 seconds.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>parameters</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Any HTTP body to send. Defaults to bank.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>headers</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>Any HTTP headers to send. Defaults to blank.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>finishHandler</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>After the request finishes, this gets called. Provides a <code><a href="../Classes/WVResponse.html">WVResponse</a></code>. You can cast it to the request type you requested in <code>requestType</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>void</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external">hobbsome</a>. All rights reserved. (Last updated: 2019-06-05)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

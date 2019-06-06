@@ -1,6 +1,6 @@
 version: "Apple Swift version 5.0.1 (swiftlang-1001.0.82.4 clang-1001.0.46.5)"
 options: "23f1c2b94c87792320cfddfb74ec3ca8"
-build_time: [1559769035, 830151000]
+build_time: [1559792513, 601629000]
 inputs:
   "/Users/jackson/Documents/Weave/Weave/WVManager.swift": [9223372036, 854775807]
   "/Users/jackson/Documents/Weave/Weave/WVManagedRequest.swift": [9223372036, 854775807]

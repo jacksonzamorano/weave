@@ -90,25 +90,34 @@ public class WVManagedRequest {
  */
 public class WVRequest {
     static var session = URLSession.shared
+    
+    private var url:URL
+    private var requestType:WVRequestType
+    private var outputType:WVOutputType
+    private var timeoutInterval:TimeInterval
+    private var parameters:[String:Encodable]
+    private var headers:[String:String]
+    
+    private init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:]) {
+        self.url = url
+        self.requestType = requestType
+        self.outputType = outputType
+        self.timeoutInterval = timeoutInterval
+        self.parameters = parameters
+        self.headers = headers
+    }
     /**
-     Starts the HTTP(S) request to the endpoint specified.
-     - Parameter url: After the request finishes, this gets called.
-     - Parameter requestType: The request type to make. Defaults to GET
-     - Parameter outputType: The request output type. Defaults to string.
-     - Parameter timeoutInterval: How long the request tries for. Defaults to 10 seconds.
-     - Parameter parameters: Any HTTP body to send. Defaults to bank.
-     - Parameter headers: Any HTTP headers to send. Defaults to blank.
-     - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType`.
-     - Returns: void
+     Starts the request.
+    - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType`.
      */
-    public static func request(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:], finishHandler fin: @escaping (WVResponse)->Void) {
+    public func start(finishHandler fin: @escaping (WVResponse)->Void) {
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeoutInterval)
         request.httpMethod = requestType.rawValue
         request.allHTTPHeaderFields = headers
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
-        session.dataTask(with: request) { (data, response, error) in
+        WVRequest.session.dataTask(with: request) { (data, response, error) in
             let status = (response as? HTTPURLResponse)?.statusCode
-            switch outputType {
+            switch self.outputType {
             case .raw:
                 let res = WVResponse()
                 res.statusCode = status
@@ -138,6 +147,20 @@ public class WVRequest {
                 fin(res)
             }
         }
+    }
+    
+    /**
+     Creates a HTTP(S) request to the endpoint specified.
+     - Parameter url: After the request finishes, this gets called.
+     - Parameter requestType: The request type to make. Defaults to GET
+     - Parameter outputType: The request output type. Defaults to string.
+     - Parameter timeoutInterval: How long the request tries for. Defaults to 10 seconds.
+     - Parameter parameters: Any HTTP body to send. Defaults to blank.
+     - Parameter headers: Any HTTP headers to send. Defaults to blank.
+     - Returns: `WVRequest`
+     */
+    public static func request(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:]) -> WVRequest {
+        return WVRequest(url: url, requestType: requestType, outputType: outputType, timeoutInterval: timeoutInterval, parameters: parameters, headers: headers)
     }
 }
 /**

@@ -129,7 +129,7 @@ public class WVRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
-                DispatchQueue.main.async {
+                DispatchQueue.main.async {\(server.url)/oauth/authorize/manual
                     fin(res)
                 }
             case .string:
@@ -139,6 +139,7 @@ public class WVRequest {
                 if let d = data, let str = String(data: d, encoding: .utf8) {
                     res.parseSuccess = true
                     res.parseResult = str
+                    res.string = str
                 } else {
                     res.parseSuccess = false
                 }

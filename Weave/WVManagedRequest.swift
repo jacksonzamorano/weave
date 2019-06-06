@@ -129,7 +129,7 @@ public class WVRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
-                DispatchQueue.main.async {\(server.url)/oauth/authorize/manual
+                DispatchQueue.main.async {
                     fin(res)
                 }
             case .string:

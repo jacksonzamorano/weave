@@ -72,7 +72,7 @@ public class WVManagedRequest {
                 let res = WVJSONResponse()
                 res.statusCode = status
                 res.data = data
-                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) as? NSDictionary {
+                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) {
                     res.parseSuccess = true
                     res.parseResult = dict
                 } else {
@@ -138,7 +138,7 @@ public class WVRequest {
                 let res = WVJSONResponse()
                 res.statusCode = status
                 res.data = data
-                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) as? NSDictionary {
+                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) {
                     res.parseSuccess = true
                     res.parseResult = dict
                 } else {

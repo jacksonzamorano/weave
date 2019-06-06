@@ -56,7 +56,9 @@ public class WVManagedRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
-                fin(res)
+                DispatchQueue.main.async {
+                    fin(res)
+                }
             case .string:
                 let res = WVStringResponse()
                 res.statusCode = status
@@ -67,7 +69,9 @@ public class WVManagedRequest {
                 } else {
                     res.parseSuccess = false
                 }
-                fin(res)
+                DispatchQueue.main.async {
+                    fin(res)
+                }
             case .json:
                 let res = WVJSONResponse()
                 res.statusCode = status
@@ -79,7 +83,9 @@ public class WVManagedRequest {
                 } else {
                     res.parseSuccess = false
                 }
-                fin(res)
+                DispatchQueue.main.async {
+                    fin(res)
+                }
             }
         }
     }
@@ -123,7 +129,9 @@ public class WVRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
-                fin(res)
+                DispatchQueue.main.async {
+                    fin(res)
+                }
             case .string:
                 let res = WVStringResponse()
                 res.statusCode = status
@@ -134,7 +142,9 @@ public class WVRequest {
                 } else {
                     res.parseSuccess = false
                 }
-                fin(res)
+                DispatchQueue.main.async {
+                    fin(res)
+                }
             case .json:
                 let res = WVJSONResponse()
                 res.statusCode = status
@@ -142,10 +152,13 @@ public class WVRequest {
                 if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) {
                     res.parseSuccess = true
                     res.parseResult = dict
+                    res.json = dict
                 } else {
                     res.parseSuccess = false
                 }
-                fin(res)
+                DispatchQueue.main.async {
+                    fin(res)
+                }
             }
         }
         req.resume()

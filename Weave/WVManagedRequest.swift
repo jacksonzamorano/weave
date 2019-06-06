@@ -115,7 +115,7 @@ public class WVRequest {
         request.httpMethod = requestType.rawValue
         request.allHTTPHeaderFields = headers
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
-        WVRequest.session.dataTask(with: request) { (data, response, error) in
+        let req = WVRequest.session.dataTask(with: request) { (data, response, error) in
             let status = (response as? HTTPURLResponse)?.statusCode
             switch self.outputType {
             case .raw:
@@ -147,6 +147,7 @@ public class WVRequest {
                 fin(res)
             }
         }
+        req.resume()
     }
     
     /**

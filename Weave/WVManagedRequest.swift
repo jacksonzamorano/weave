@@ -49,7 +49,7 @@ public class WVManagedRequest {
             combinedParameters[i.key] = i.value
         }
         request.httpBody = combinedParameters.percentEscaped().data(using: .utf8)
-        manager.session.dataTask(with: request) { (data, response, error) in
+        let task = manager.session.dataTask(with: request) { (data, response, error) in
             let status = (response as? HTTPURLResponse)?.statusCode
             switch self.outputType {
             case .raw:
@@ -66,6 +66,7 @@ public class WVManagedRequest {
                 if let d = data, let str = String(data: d, encoding: .utf8) {
                     res.parseSuccess = true
                     res.parseResult = str
+                    res.string = str
                 } else {
                     res.parseSuccess = false
                 }
@@ -88,6 +89,7 @@ public class WVManagedRequest {
                 }
             }
         }
+        task.resume()
     }
     
     

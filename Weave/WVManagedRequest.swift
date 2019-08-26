@@ -188,7 +188,7 @@ public enum WVRequestType:String {
     /**
      A HTTP request type.
      */
-    case get = "GET", post = "POST", patch = "PATCH", put = "PUT"
+    case get = "GET", post = "POST", patch = "PATCH", put = "PUT", delete = "DELETE"
 }
 /**
  Describes the type of output to be made.

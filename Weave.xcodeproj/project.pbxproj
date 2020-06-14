@@ -7,17 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7AB383AA2495A886007DC445 /* WVRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB383A92495A886007DC445 /* WVRequest.swift */; };
+		7AB383AC2495A966007DC445 /* WVProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB383AB2495A966007DC445 /* WVProfileManager.swift */; };
+		7AB383AE2495AE9C007DC445 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7AB383AD2495AE9B007DC445 /* README.md */; };
 		7AE6E6F32280EE0E009D1B97 /* Weave.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE6E6E52280EE0E009D1B97 /* Weave.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7AF2CE48228278C000E9904C /* WVManagedRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2CE47228278C000E9904C /* WVManagedRequest.swift */; };
-		7AF2CE4A2282792200E9904C /* WVManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AF2CE492282792200E9904C /* WVManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		7AB383A92495A886007DC445 /* WVRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVRequest.swift; sourceTree = "<group>"; };
+		7AB383AB2495A966007DC445 /* WVProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVProfileManager.swift; sourceTree = "<group>"; };
+		7AB383AD2495AE9B007DC445 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7AE6E6E22280EE0E009D1B97 /* Weave.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Weave.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE6E6E52280EE0E009D1B97 /* Weave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Weave.h; sourceTree = "<group>"; };
 		7AE6E6E62280EE0E009D1B97 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7AF2CE47228278C000E9904C /* WVManagedRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVManagedRequest.swift; sourceTree = "<group>"; };
-		7AF2CE492282792200E9904C /* WVManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -34,6 +36,7 @@
 		7AE6E6D82280EE0E009D1B97 = {
 			isa = PBXGroup;
 			children = (
+				7AB383AD2495AE9B007DC445 /* README.md */,
 				7AE6E6E42280EE0E009D1B97 /* Weave */,
 				7AE6E6E32280EE0E009D1B97 /* Products */,
 			);
@@ -52,8 +55,8 @@
 			children = (
 				7AE6E6E52280EE0E009D1B97 /* Weave.h */,
 				7AE6E6E62280EE0E009D1B97 /* Info.plist */,
-				7AF2CE47228278C000E9904C /* WVManagedRequest.swift */,
-				7AF2CE492282792200E9904C /* WVManager.swift */,
+				7AB383AB2495A966007DC445 /* WVProfileManager.swift */,
+				7AB383A92495A886007DC445 /* WVRequest.swift */,
 			);
 			path = Weave;
 			sourceTree = "<group>";
@@ -128,6 +131,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7AB383AE2495AE9C007DC445 /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -138,8 +142,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AF2CE4A2282792200E9904C /* WVManager.swift in Sources */,
-				7AF2CE48228278C000E9904C /* WVManagedRequest.swift in Sources */,
+				7AB383AC2495A966007DC445 /* WVProfileManager.swift in Sources */,
+				7AB383AA2495A886007DC445 /* WVRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

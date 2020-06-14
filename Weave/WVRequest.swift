@@ -1,99 +1,5 @@
 import Foundation
-/**
- The main class to make requests with. This can't be created from this class; instead, create a request from a `WVManager`.
- */
-public class WVManagedRequest {
-    /**
-     The HTTP request type.
-     */
-    public var requestType:WVRequestType = .get
-    /**
-     The type of response to return.
-     */
-    public var outputType:WVOutputType = .string
-    /**
-     HTTP body parameters.
-     */
-    public var parameters:[String:Encodable] = [:]
-    /**
-     HTTP headers.
-     */
-    public var headers:[String:String] = [:]
-    /**
-     The request URL.
-     */
-    public var url:URL
-    /**
-     Number of seconds to try requesting for. Defaults to `10`.
-     */
-    public var timeoutInterval:TimeInterval = 10
-    var manager:WVManager
-    init(requestURL req:URL, requestType rt:WVRequestType = .get, outputType ot:WVOutputType, manager mg:WVManager) {
-        self.url = req
-        self.manager = mg
-        self.requestType = rt
-        self.outputType = ot
-    }
-/**
-     Starts the HTTP(S) request to the endpoint specified.
-     - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType`.
 
-     - Returns: void
- */
-    public func start(finishHandler fin: @escaping (WVResponse)->Void) {
-        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeoutInterval)
-        request.httpMethod = requestType.rawValue
-        request.allHTTPHeaderFields = headers
-        var combinedParameters = parameters
-        for i in manager.baseParameters {
-            combinedParameters[i.key] = i.value
-        }
-        request.httpBody = combinedParameters.percentEscaped().data(using: .utf8)
-        let task = manager.session.dataTask(with: request) { (data, response, error) in
-            let status = (response as? HTTPURLResponse)?.statusCode
-            switch self.outputType {
-            case .raw:
-                let res = WVResponse()
-                res.statusCode = status
-                res.data = data
-                DispatchQueue.main.async {
-                    fin(res)
-                }
-            case .string:
-                let res = WVStringResponse()
-                res.statusCode = status
-                res.data = data
-                if let d = data, let str = String(data: d, encoding: .utf8) {
-                    res.parseSuccess = true
-                    res.parseResult = str
-                    res.string = str
-                } else {
-                    res.parseSuccess = false
-                }
-                DispatchQueue.main.async {
-                    fin(res)
-                }
-            case .json:
-                let res = WVJSONResponse()
-                res.statusCode = status
-                res.data = data
-                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) {
-                    res.parseSuccess = true
-                    res.parseResult = dict
-                    res.json = dict
-                } else {
-                    res.parseSuccess = false
-                }
-                DispatchQueue.main.async {
-                    fin(res)
-                }
-            }
-        }
-        task.resume()
-    }
-    
-    
-}
 /**
  The basic request class. Doesn't have any special bells or whistles. Can parse JSON and Strings.
  */
@@ -107,7 +13,7 @@ public class WVRequest {
     private var parameters:[String:Encodable]
     private var headers:[String:String]
     
-    private init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:]) {
+    public init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:]) {
         self.url = url
         self.requestType = requestType
         self.outputType = outputType
@@ -117,7 +23,7 @@ public class WVRequest {
     }
     /**
      Starts the request.
-    - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType`.
+    - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType` (i.e, let json = response as! WVJSONRequest).
      */
     public func start(finishHandler fin: @escaping (WVResponse)->Void) {
         var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeoutInterval)
@@ -261,4 +167,26 @@ public class WVJSONResponse:WVParsedResponse {
      The JSON object after parsing. Depending on the API, you will need to cast this into an array or dictionary.
      */
     public var json:Any? = nil
+}
+
+
+extension Dictionary {
+    func percentEscaped() -> String {
+        return map { (key, value) in
+            let escapedKey = "\(key)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            let escapedValue = "\(value)".addingPercentEncoding(withAllowedCharacters: .urlQueryValueAllowed) ?? ""
+            return escapedKey + "=" + escapedValue
+            }
+            .joined(separator: "&")
+    }
+}
+extension CharacterSet {
+    static let urlQueryValueAllowed: CharacterSet = {
+        let generalDelimitersToEncode = ":#[]@" // does not include "?" or "/" due to RFC 3986 - Section 3.4
+        let subDelimitersToEncode = "!$&'()*+,;="
+        
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "\(generalDelimitersToEncode)\(subDelimitersToEncode)")
+        return allowed
+    }()
 }

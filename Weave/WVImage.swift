@@ -61,7 +61,6 @@ public class WVImage {
     
     /**
      Clears all stored images.
-     
      */
     static public func clearCache() {
         if FileManager.default.fileExists(atPath: filePath.path) {

@@ -87,6 +87,81 @@ public class WVRequest {
         return WVRequest(url: url, requestType: requestType, outputType: outputType, timeoutInterval: timeoutInterval, parameters: parameters, headers: headers)
     }
 }
+
+
+public class WVCustomRequest {
+    static var session = URLSession.shared
+    
+    private var outputType:WVOutputType
+    private var request: URLRequest
+    
+    public init(request:URLRequest, outputType:WVOutputType = .string) {
+        self.request = request
+        self.outputType = outputType
+    }
+    /**
+     Starts the request.
+    - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType` (i.e, let json = response as! WVJSONRequest).
+     */
+    public func start(finishHandler fin: @escaping (WVResponse)->Void) {
+        let req = WVRequest.session.dataTask(with: request) { (data, response, error) in
+            let status = (response as? HTTPURLResponse)?.statusCode
+            switch self.outputType {
+            case .raw:
+                let res = WVResponse()
+                res.statusCode = status
+                res.data = data
+                DispatchQueue.main.async {
+                    fin(res)
+                }
+            case .string:
+                let res = WVStringResponse()
+                res.statusCode = status
+                res.data = data
+                if let d = data, let str = String(data: d, encoding: .utf8) {
+                    res.parseSuccess = true
+                    res.parseResult = str
+                    res.string = str
+                } else {
+                    res.parseSuccess = false
+                }
+                DispatchQueue.main.async {
+                    fin(res)
+                }
+            case .json:
+                let res = WVJSONResponse()
+                res.statusCode = status
+                res.data = data
+                if let d = data, let dict = try? JSONSerialization.jsonObject(with: d, options: .allowFragments) {
+                    res.parseSuccess = true
+                    res.parseResult = dict
+                    res.json = dict
+                } else {
+                    res.parseSuccess = false
+                }
+                DispatchQueue.main.async {
+                    fin(res)
+                }
+            }
+        }
+        req.resume()
+    }
+    
+    /**
+     Creates a HTTP(S) request to the endpoint specified.
+     - Parameter url: After the request finishes, this gets called.
+     - Parameter requestType: The request type to make. Defaults to GET
+     - Parameter outputType: The request output type. Defaults to string.
+     - Parameter timeoutInterval: How long the request tries for. Defaults to 10 seconds.
+     - Parameter parameters: Any HTTP body to send. Defaults to blank.
+     - Parameter headers: Any HTTP headers to send. Defaults to blank.
+     - Returns: `WVRequest`
+     */
+    public static func request(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:]) -> WVRequest {
+        return WVRequest(url: url, requestType: requestType, outputType: outputType, timeoutInterval: timeoutInterval, parameters: parameters, headers: headers)
+    }
+}
+
 /**
  Describes the type of request to be made.
  */

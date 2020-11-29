@@ -8,14 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		7AB383AA2495A886007DC445 /* WVRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB383A92495A886007DC445 /* WVRequest.swift */; };
-		7AB383AC2495A966007DC445 /* WVProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB383AB2495A966007DC445 /* WVProfileManager.swift */; };
+		7AB383AC2495A966007DC445 /* WVImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AB383AB2495A966007DC445 /* WVImage.swift */; };
 		7AB383AE2495AE9C007DC445 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 7AB383AD2495AE9B007DC445 /* README.md */; };
 		7AE6E6F32280EE0E009D1B97 /* Weave.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AE6E6E52280EE0E009D1B97 /* Weave.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7AB383A92495A886007DC445 /* WVRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVRequest.swift; sourceTree = "<group>"; };
-		7AB383AB2495A966007DC445 /* WVProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVProfileManager.swift; sourceTree = "<group>"; };
+		7AB383AB2495A966007DC445 /* WVImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WVImage.swift; sourceTree = "<group>"; };
 		7AB383AD2495AE9B007DC445 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		7AE6E6E22280EE0E009D1B97 /* Weave.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Weave.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AE6E6E52280EE0E009D1B97 /* Weave.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Weave.h; sourceTree = "<group>"; };
@@ -55,7 +55,7 @@
 			children = (
 				7AE6E6E52280EE0E009D1B97 /* Weave.h */,
 				7AE6E6E62280EE0E009D1B97 /* Info.plist */,
-				7AB383AB2495A966007DC445 /* WVProfileManager.swift */,
+				7AB383AB2495A966007DC445 /* WVImage.swift */,
 				7AB383A92495A886007DC445 /* WVRequest.swift */,
 			);
 			path = Weave;
@@ -100,7 +100,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 1020;
-				LastUpgradeCheck = 1020;
+				LastUpgradeCheck = 1220;
 				ORGANIZATIONNAME = "Jackson Zamorano";
 				TargetAttributes = {
 					7AE6E6E12280EE0E009D1B97 = {
@@ -142,7 +142,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7AB383AC2495A966007DC445 /* WVProfileManager.swift in Sources */,
+				7AB383AC2495A966007DC445 /* WVImage.swift in Sources */,
 				7AB383AA2495A886007DC445 /* WVRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -176,6 +176,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -202,7 +203,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -240,6 +241,7 @@
 				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
 				CLANG_WARN_STRICT_PROTOTYPES = YES;
 				CLANG_WARN_SUSPICIOUS_MOVE = YES;
@@ -260,7 +262,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -286,7 +288,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Weave/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -315,7 +317,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				INFOPLIST_FILE = Weave/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

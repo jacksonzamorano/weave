@@ -59,6 +59,16 @@ public class WVImage {
         }
     }
     
+    /**
+     Clears all stored images.
+     
+     */
+    static public func clearCache() {
+        if FileManager.default.fileExists(atPath: filePath.path) {
+            try! FileManager.default.removeItem(at: filePath)
+        }
+    }
+    
     static private func cachedImage(id:String) -> UIImage? {
         let contents = try! FileManager.default.contentsOfDirectory(atPath: filePath.path)
         if contents.contains("\(id).png") {

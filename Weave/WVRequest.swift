@@ -13,13 +13,19 @@ public class WVRequest {
     private var parameters:[String:Encodable]
     private var headers:[String:String]
     
-    public init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:]) {
+    public init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:], username: String? = nil, password: String? = nil) {
         self.url = url
         self.requestType = requestType
         self.outputType = outputType
         self.timeoutInterval = timeoutInterval
         self.parameters = parameters
         self.headers = headers
+        if let u = username, let p = password {
+            let auth = "\(u):\(p)"
+            let authData = auth.data(using: .utf8)
+            let authBase64 = authData!.base64EncodedString()
+            self.headers["Authorization"] = "Basic \(authBase64)"
+        }
     }
     /**
      Starts the request.

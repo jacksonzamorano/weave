@@ -206,7 +206,7 @@ public class WVResponse {
      */
     public var statusCode:Int?
     /**
-     The raw data recieved from the request.
+     The raw data received request.
      */
     public var data:Data?
     /**

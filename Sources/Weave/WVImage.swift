@@ -5,7 +5,7 @@ import Foundation
  */
 public class WVImage {
     private static var inProgress = [String]()
-    private static var listeners = [String:[(UIImage?)->Void]]()
+    private static var listeners = [String:[(Data?)->Void]]()
     
     /// Change `WVImage.filePath` to change where `WVImage` will save and search for images.
     public static var filePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0].appendingPathComponent("wv-imagecache")
@@ -16,7 +16,7 @@ public class WVImage {
      - Parameter fallbackURL: The URL to download from if the image cannot be found locally.
      - Parameter completion: The `UIImage` will be returned here, always. It is recommended to set a placeholder image (i.e. a generic profile icon) before calling `get` to set the image so that a user is not left with a blank view.
      */
-    static public func get(id: String, fallbackURL url: String, completion:@escaping(UIImage?)->Void) {
+    static public func get(id: String, fallbackURL url: String, completion:@escaping(Data?)->Void) {
         if !FileManager.default.fileExists(atPath: filePath.path) {
             try! FileManager.default.createDirectory(at: filePath, withIntermediateDirectories: false, attributes: nil)
         }
@@ -32,13 +32,12 @@ public class WVImage {
             } else {
                 WVRequest.request(url: URL(string: url)!, outputType: .raw).start { (res) in
                     if res.success {
-                        let image = UIImage(data: res.data!)
                         if let ls = listeners[id] {
-                            for i in ls { i(image) }
+                            for i in ls { i(res.data) }
                         }
-                        completion(image)
-                        if let i = image {
-                            try! i.pngData()!.write(to: filePath.appendingPathComponent("\(id).png"))
+                        completion(res.data)
+                        if let i = res.data {
+                            try! i.write(to: filePath.appendingPathComponent("\(id).png"))
                         }
                     } else {
                         completion(nil)
@@ -68,10 +67,10 @@ public class WVImage {
         }
     }
     
-    static private func cachedImage(id:String) -> UIImage? {
+    static private func cachedImage(id:String) -> Data? {
         let contents = try! FileManager.default.contentsOfDirectory(atPath: filePath.path)
         if contents.contains("\(id).png") {
-            return UIImage(contentsOfFile: filePath.appendingPathComponent("\(id).png").path)
+            return try! Data(contentsOf: filePath.appendingPathComponent("\(id).png"))
         } else {
             return nil
         }

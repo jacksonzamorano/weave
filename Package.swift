@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "Weave",
+    platforms: [
+        .iOS("12.0"), .macOS("10.13"), .watchOS("4.0")
+    ],
     products: [
         // Products define the executables and libraries a package produces, and make them visible to other packages.
         .library(

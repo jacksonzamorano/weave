@@ -48,6 +48,34 @@ public class WVImage {
     }
     
     /**
+     Get an image. If it cannot be found locally, it will be downloaded from the URL specified.
+     - Parameter id: Any persistent identifier to store the image under. This will be the filename of the url downloaded.
+     - Parameter fallbackURL: The URL to download from if the image cannot be found locally.
+     - Parameter completion: The `UIImage` will be returned here, always. It is recommended to set a placeholder image (i.e. a generic profile icon) before calling `get` to set the image so that a user is not left with a blank view.
+     */
+    static public func getAsync(id: String, fallbackURL url: String) async throws -> Data? {
+        if !FileManager.default.fileExists(atPath: filePath.path) {
+            try! FileManager.default.createDirectory(at: filePath, withIntermediateDirectories: false, attributes: nil)
+        }
+        if let av = cachedImage(id: id) {
+            return(av)
+        } else {
+            let res = try! await WVRequest.request(url: URL(string: url)!, outputType: .raw).startAsync()
+            if res.success {
+                if let ls = listeners[id] {
+                    for i in ls { i(res.data) }
+                }
+                if let i = res.data {
+                    try! i.write(to: filePath.appendingPathComponent("\(id).png"))
+                }
+                return res.data
+            } else {
+                return nil
+            }
+        }
+    }
+    
+    /**
      Delete an image with `id` from Weave's local cache.
     - Parameter id: Any persistent identifier to attempt to delete.
     */

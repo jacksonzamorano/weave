@@ -79,6 +79,50 @@ public class WVRequest {
         req.resume()
     }
     
+    public func startAsync() async throws -> WVResponse {
+        var request = URLRequest(url: url, cachePolicy: .reloadIgnoringLocalCacheData, timeoutInterval: timeoutInterval)
+        request.httpMethod = requestType.rawValue
+        request.allHTTPHeaderFields = headers
+        request.httpBody = parameters.percentEscaped().data(using: .utf8)
+        do {
+            let (data, response) = try await WVRequest.session.data(for: request)
+            let status = (response as? HTTPURLResponse)?.statusCode
+            switch self.outputType {
+            case .raw:
+                let res = WVResponse()
+                res.statusCode = status
+                res.data = data
+                return res
+            case .string:
+                let res = WVStringResponse()
+                res.statusCode = status
+                res.data = data
+                if let str = String(data: data, encoding: .utf8) {
+                    res.parseSuccess = true
+                    res.parseResult = str
+                    res.string = str
+                } else {
+                    res.parseSuccess = false
+                }
+                return res
+            case .json:
+                let res = WVJSONResponse()
+                res.statusCode = status
+                res.data = data
+                if let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
+                    res.parseSuccess = true
+                    res.parseResult = dict
+                    res.json = dict
+                } else {
+                    res.parseSuccess = false
+                }
+                return res
+            }
+        } catch {
+            throw error
+        }
+    }
+    
     /**
      Creates a HTTP(S) request to the endpoint specified.
      - Parameter url: After the request finishes, this gets called.

@@ -1,10 +1,21 @@
 import Foundation
 
+class WVInsecureRequestDelegate: NSObject, URLSessionDelegate {
+    func urlSession(_ session: URLSession, didReceive challenge: URLAuthenticationChallenge) async -> (URLSession.AuthChallengeDisposition, URLCredential?) {
+        if let st = challenge.protectionSpace.serverTrust {
+            return (URLSession.AuthChallengeDisposition.useCredential, URLCredential(trust: st))
+        } else {
+            return (URLSession.AuthChallengeDisposition.useCredential, nil)
+        }
+    }
+}
+
 /**
  The basic request class. Doesn't have any special bells or whistles. Can parse JSON and Strings.
  */
 public class WVRequest {
-    static var session = URLSession.shared
+    var session: URLSession
+    var delegate: URLSessionDelegate?
     
     private var url:URL
     private var requestType:WVRequestType
@@ -13,13 +24,17 @@ public class WVRequest {
     private var parameters:[String:Encodable]
     private var headers:[String:String]
     
-    public init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:], username: String? = nil, password: String? = nil) {
+    public init(url:URL, requestType:WVRequestType = .get, outputType:WVOutputType = .string, timeoutInterval:TimeInterval = 10, parameters:[String:Encodable] = [:], headers:[String:String] = [:], username: String? = nil, password: String? = nil, allowInsecure: Bool = false) {
         self.url = url
         self.requestType = requestType
         self.outputType = outputType
         self.timeoutInterval = timeoutInterval
         self.parameters = parameters
         self.headers = headers
+        if allowInsecure {
+            self.delegate = WVInsecureRequestDelegate()
+        }
+        self.session = URLSession(configuration: URLSessionConfiguration.ephemeral, delegate: self.delegate, delegateQueue: nil)
         if let u = username, let p = password {
             let auth = "\(u):\(p)"
             let authData = auth.data(using: .utf8)
@@ -36,7 +51,7 @@ public class WVRequest {
         request.httpMethod = requestType.rawValue
         request.allHTTPHeaderFields = headers
         request.httpBody = parameters.percentEscaped().data(using: .utf8)
-        let req = WVRequest.session.dataTask(with: request) { (data, response, error) in
+        let req = self.session.dataTask(with: request) { (data, response, error) in
             let status = (response as? HTTPURLResponse)?.statusCode
             switch self.outputType {
             case .raw:
@@ -96,7 +111,7 @@ public class WVRequest {
 
 
 public class WVCustomRequest {
-    static var session = URLSession.shared
+    var session: URLSession
     
     private var outputType:WVOutputType
     private var request: URLRequest
@@ -104,13 +119,14 @@ public class WVCustomRequest {
     public init(request:URLRequest, outputType:WVOutputType = .string) {
         self.request = request
         self.outputType = outputType
+        self.session = URLSession.shared
     }
     /**
      Starts the request.
     - Parameter finishHandler: After the request finishes, this gets called. Provides a `WVResponse`. You can cast it to the request type you requested in `requestType` (i.e, let json = response as! WVJSONRequest).
      */
     public func start(finishHandler fin: @escaping (WVResponse)->Void) {
-        let req = WVRequest.session.dataTask(with: request) { (data, response, error) in
+        let req = self.session.dataTask(with: request) { (data, response, error) in
             let status = (response as? HTTPURLResponse)?.statusCode
             switch self.outputType {
             case .raw:

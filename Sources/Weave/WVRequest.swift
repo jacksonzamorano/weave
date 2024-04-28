@@ -58,6 +58,9 @@ public class WVRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
+                if let http = response as? HTTPURLResponse {
+                    res.headers = http.allHeaderFields
+                }
                 DispatchQueue.main.async {
                     fin(res)
                 }
@@ -69,6 +72,9 @@ public class WVRequest {
                     res.parseSuccess = true
                     res.parseResult = str
                     res.string = str
+                    if let http = response as? HTTPURLResponse {
+                        res.headers = http.allHeaderFields
+                    }
                 } else {
                     res.parseSuccess = false
                 }
@@ -83,6 +89,9 @@ public class WVRequest {
                     res.parseSuccess = true
                     res.parseResult = dict
                     res.json = dict
+                    if let http = response as? HTTPURLResponse {
+                        res.headers = http.allHeaderFields
+                    }
                 } else {
                     res.parseSuccess = false
                 }
@@ -107,11 +116,17 @@ public class WVRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
+                if let http = response as? HTTPURLResponse {
+                    res.headers = http.allHeaderFields
+                }
                 return res
             case .string:
                 let res = WVStringResponse()
                 res.statusCode = status
                 res.data = data
+                if let http = response as? HTTPURLResponse {
+                    res.headers = http.allHeaderFields
+                }
                 if let str = String(data: data, encoding: .utf8) {
                     res.parseSuccess = true
                     res.parseResult = str
@@ -124,6 +139,9 @@ public class WVRequest {
                 let res = WVJSONResponse()
                 res.statusCode = status
                 res.data = data
+                if let http = response as? HTTPURLResponse {
+                    res.headers = http.allHeaderFields
+                }
                 if let dict = try? JSONSerialization.jsonObject(with: data, options: .allowFragments) {
                     res.parseSuccess = true
                     res.parseResult = dict

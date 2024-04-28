@@ -181,6 +181,9 @@ public class WVCustomRequest {
                 let res = WVResponse()
                 res.statusCode = status
                 res.data = data
+                if let http = response as? HTTPURLResponse {
+                    res.headers = http.allHeaderFields
+                }
                 DispatchQueue.main.async {
                     fin(res)
                 }
@@ -192,6 +195,9 @@ public class WVCustomRequest {
                     res.parseSuccess = true
                     res.parseResult = str
                     res.string = str
+                    if let http = response as? HTTPURLResponse {
+                        res.headers = http.allHeaderFields
+                    }
                 } else {
                     res.parseSuccess = false
                 }
@@ -206,6 +212,9 @@ public class WVCustomRequest {
                     res.parseSuccess = true
                     res.parseResult = dict
                     res.json = dict
+                    if let http = response as? HTTPURLResponse {
+                        res.headers = http.allHeaderFields
+                    }
                 } else {
                     res.parseSuccess = false
                 }
@@ -281,6 +290,10 @@ public class WVResponse {
             return statusCode == 200
         }
     }
+    /**
+     Headers
+     */
+    public var headers: [AnyHashable: Any] = [:]
 }
 /**
  A subclass of WVResponse designed to handle responses that need to be parsed or formatted.

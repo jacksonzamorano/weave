@@ -9,6 +9,8 @@ class Request<T: Response> {
     var delegate: (any URLSessionDelegate)?
     
     public convenience init(_ url: URL) {
+        var req = URLRequest(url: url)
+        req.httpMethod = RequestMethod.Get.rawValue
         self.init(urlRequest: URLRequest(url: url))
     }
     
@@ -33,8 +35,13 @@ class Request<T: Response> {
         return self
     }
     
-    public func bearer(token: String) -> Self {
+    public func bearer(_ token: String) -> Self {
         self.urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        return self
+    }
+    
+    public func method(_ method: RequestMethod) -> Self {
+        self.urlRequest.httpMethod = method.rawValue
         return self
     }
     
@@ -85,4 +92,8 @@ public enum RequestErrorType {
     case networkFailed
     case parseIneligible
     case parseFailed
+}
+
+public enum RequestMethod: String {
+    case Get = "GET", Post = "POST", Patch = "PATCH", Put = "PUT", Delete = "DELETE"
 }

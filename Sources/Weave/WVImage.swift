@@ -30,19 +30,21 @@ public class WVImage {
             if let av = cachedImage(id: id) {
                 completion(av)
             } else {
-                WVRequest.request(url: URL(string: url)!, outputType: .raw).start { (res) in
-                    if res.success {
-                        if let ls = listeners[id] {
-                            for i in ls { i(res.data) }
+                Request<RawResponse>(URL(string: url)!)
+                    .startTask({ res in
+                        switch res {
+                        case .success(let d):
+                            if let ls = listeners[id] {
+                                for i in ls { i(d) }
+                            }
+                            completion(d)
+                            try! d.write(to: filePath.appendingPathComponent("\(id).png"))
+                            break
+                        case .failure(_):
+                            completion(nil)
+                            break
                         }
-                        completion(res.data)
-                        if let i = res.data {
-                            try! i.write(to: filePath.appendingPathComponent("\(id).png"))
-                        }
-                    } else {
-                        completion(nil)
-                    }
-                }
+                    })
             }
         }
     }

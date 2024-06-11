@@ -45,19 +45,19 @@ public class Request<T: Response> {
         return self
     }
     
-    public func start() async -> Result<T.ResponseClass, RequestError> {
+    public func start() async throws -> T.ResponseClass {
         do {
             let (data, response) = try await self.session.data(for: self.urlRequest)
             let parser = T()
             if !parser.canParse(response: response as! HTTPURLResponse, data: data) {
-                return .failure(.init(errorType: .parseIneligible, description: "Cannot use requested parser."))
+                throw RequestError(errorType: .parseIneligible, description: "Cannot use requested parser.")
             }
             guard let parsed = parser.parse(response: response as! HTTPURLResponse, data: data) else {
-                return .failure(.init(errorType: .parseFailed, description: "Parser produced error."))
+                throw RequestError(errorType: .parseFailed, description: "Parser produced error.")
             }
-            return .success(parsed)
+            return parsed
         } catch {
-            return .failure(.init(errorType: .networkFailed, description: error.localizedDescription))
+            throw RequestError(errorType: .networkFailed, description: error.localizedDescription)
         }
     }
     

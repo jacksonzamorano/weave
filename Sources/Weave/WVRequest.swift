@@ -1,6 +1,6 @@
 import Foundation
 
-class Request<T: Response> {
+public class Request<T: Response> {
     var session: URLSession
     
     var urlRequest: URLRequest
@@ -10,7 +10,7 @@ class Request<T: Response> {
     
     public convenience init(_ url: URL) {
         var req = URLRequest(url: url)
-        req.httpMethod = RequestMethod.Get.rawValue
+        req.httpMethod = RequestMethod.get.rawValue
         self.init(urlRequest: URLRequest(url: url))
     }
     
@@ -95,5 +95,5 @@ public enum RequestErrorType {
 }
 
 public enum RequestMethod: String {
-    case Get = "GET", Post = "POST", Patch = "PATCH", Put = "PUT", Delete = "DELETE"
+    case get = "GET", post = "POST", patch = "PATCH", put = "PUT", delete = "DELETE"
 }

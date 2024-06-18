@@ -1,12 +1,19 @@
 import Foundation
 
-public class Request<T: Response> {
+@available(macOS 12.0, *)
+public class Request<T: ResponseType> {
     var session: URLSession
     
     var urlRequest: URLRequest
     var timeout: TimeInterval = 30
     
     var delegate: (any URLSessionDelegate)?
+    
+    public var url: URL {
+        get {
+            return urlRequest.url!
+        }
+    }
     
     public convenience init(_ url: URL) {
         var req = URLRequest(url: url)
@@ -45,19 +52,25 @@ public class Request<T: Response> {
         return self
     }
     
-    public func start() async throws -> T.ResponseClass {
+    public func start() async throws -> Response<T.ResponseClass> {
         do {
-            let (data, response) = try await self.session.data(for: self.urlRequest)
+            let (data, resBasic) = try await self.session.data(for: self.urlRequest)
+            let response = resBasic as! HTTPURLResponse
             let parser = T()
-            if !parser.canParse(response: response as! HTTPURLResponse, data: data) {
+            if !parser.canParse(response: response, data: data) {
                 throw RequestError(errorType: .parseIneligible, description: "Cannot use requested parser.")
             }
-            guard let parsed = parser.parse(response: response as! HTTPURLResponse, data: data) else {
-                throw RequestError(errorType: .parseFailed, description: "Parser produced error.")
+            var res = Response<T.ResponseClass>(status_code: response.statusCode, raw: data)
+            do {
+                let parsed = try parser.parse(response: response as! HTTPURLResponse, data: data)
+                res.data = parsed
+            } catch {
+                print(error)
             }
-            return parsed
+            return res
         } catch {
-            throw RequestError(errorType: .networkFailed, description: error.localizedDescription)
+            print(error)
+            throw error
         }
     }
     
@@ -72,7 +85,7 @@ public class Request<T: Response> {
                     ch(.failure(.init(errorType: .parseIneligible, description: "Cannot use requested parser.")))
                     return
                 }
-                guard let parsed = parser.parse(response: response as! HTTPURLResponse, data: data!) else {
+                guard let parsed = try? parser.parse(response: response as! HTTPURLResponse, data: data!) else {
                     ch(.failure(.init(errorType: .parseFailed, description: "Parser produced error.")))
                     return
                 }
@@ -81,6 +94,12 @@ public class Request<T: Response> {
             }
         }
     }
+}
+
+public struct Response<T> {
+    public var data: T?
+    public var status_code: Int
+    public var raw: Data
 }
 
 public struct RequestError: Error {

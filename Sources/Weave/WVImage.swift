@@ -3,6 +3,7 @@ import Foundation
 /**
  Automatically handles the fetching and caching of images from the network.
  */
+@available(macOS 12.0, *)
 public class WVImage {
     private static var inProgress = [String]()
     private static var listeners = [String:[(Data?)->Void]]()

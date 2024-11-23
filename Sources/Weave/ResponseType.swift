@@ -6,7 +6,7 @@ public protocol ResponseType {
     init()
     
     func canParse(response: HTTPURLResponse, data: Data) -> Bool
-    func parse(response: HTTPURLResponse, data: Data) throws -> ResponseClass
+    func parse(data: Data) throws -> ResponseClass
 }
 
 public class RawResponse: ResponseType {
@@ -19,7 +19,7 @@ public class RawResponse: ResponseType {
     public func canParse(response: HTTPURLResponse, data: Data) -> Bool {
         return true
     }
-    public func parse(response: HTTPURLResponse, data: Data) throws -> Data {
+    public func parse(data: Data) throws -> Data {
         return data
     }
 }
@@ -35,7 +35,7 @@ public class JsonAnyResponse<ValueType>: ResponseType {
         return response.statusCode < 400
     }
     
-    public func parse(response: HTTPURLResponse, data: Data) throws -> JsonAnyResponse<ValueType>.ResponseClass {
+    public func parse(data: Data) throws -> JsonAnyResponse<ValueType>.ResponseClass {
         return try JSONSerialization.jsonObject(with: data) as! JsonAnyResponse<ValueType>.ResponseClass
     }
     
@@ -52,7 +52,7 @@ public class JsonCodableResponse<ValueType: Codable>: ResponseType {
         return true
     }
     
-    public func parse(response: HTTPURLResponse, data: Data) throws -> ValueType {
+    public func parse(data: Data) throws -> ValueType {
         return try JSONDecoder().decode(ValueType.self, from: data)
     }
 }

@@ -17,7 +17,9 @@ public class JsonBody: BodyData {
     }
     
     public func intoData() -> Data {
-        return try! JSONEncoder().encode(data)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .withoutEscapingSlashes
+        return try! encoder.encode(data)
     }
 }
 

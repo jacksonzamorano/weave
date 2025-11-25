@@ -72,7 +72,7 @@ public class Request<T: ResponseType> {
         } catch let error as URLError {
             throw RequestErrorCode.urlSessionError(error)
         } catch {
-            throw RequestErrorCode.unknownError
+            throw RequestErrorCode.unknownError(error)
         }
     }
 }
@@ -117,7 +117,7 @@ public enum RequestErrorCode: Error {
          urlSessionError(URLError),
          otherCode(Int, Data),
          parseError(Data),
-         unknownError
+         unknownError(Error)
     
     static func fromCode(code: Int, data: Data) -> RequestErrorCode {
         switch code {

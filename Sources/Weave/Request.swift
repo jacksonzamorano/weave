@@ -52,7 +52,7 @@ public class Request<T: ResponseType> {
         return self
     }
     
-    public func start() async -> Result<T.ResponseClass, RequestErrorCode> {
+    public func start() async throws(RequestErrorCode) -> T.ResponseClass {
         do {
             let (data, resBasic) = try await self.session.data(for: self.urlRequest)
             let response = resBasic as! HTTPURLResponse
@@ -62,16 +62,17 @@ public class Request<T: ResponseType> {
             }
             if response.statusCode < 300 {
                 guard let parsed = try? parser.parse(data: data) else {
-                    return .failure(.parseError(data))
+                    throw RequestErrorCode.parseError(data)
                 }
-                return .success(parsed)
+                return parsed
             } else {
-                return .failure(.fromCode(code: response.statusCode, data: data))
+                throw RequestErrorCode
+                    .fromCode(code: response.statusCode, data: data)
             }
         } catch let error as URLError {
-            return .failure(.urlSessionError(error))
+            throw RequestErrorCode.urlSessionError(error)
         } catch {
-            return .failure(.unknownError)
+            throw RequestErrorCode.unknownError
         }
     }
 }

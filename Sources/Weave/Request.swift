@@ -71,6 +71,8 @@ public class Request<T: ResponseType> {
             }
         } catch let error as URLError {
             throw RequestErrorCode.urlSessionError(error)
+        } catch let error as RequestErrorCode {
+            throw error
         } catch {
             throw RequestErrorCode.unknownError(error)
         }

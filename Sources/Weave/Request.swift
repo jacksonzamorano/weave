@@ -52,6 +52,11 @@ public class Request<T: ResponseType> {
         return self
     }
     
+    public func timeout(_ timeout: TimeInterval) -> Self {
+        self.urlRequest.timeoutInterval = timeout
+        return self
+    }
+    
     public func start() async throws(RequestErrorCode) -> T.ResponseClass {
         do {
             let (data, resBasic) = try await self.session.data(for: self.urlRequest)

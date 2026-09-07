@@ -56,3 +56,25 @@ public class JsonCodableResponse<ValueType: Codable>: ResponseType {
         return try JSONDecoder().decode(ValueType.self, from: data)
     }
 }
+
+enum StringResponseError: Error {
+    case decodeFailed
+}
+public class StringResponse: ResponseType {
+    public typealias ResponseClass = String
+    
+    required public init() {
+        
+    }
+    
+    public func canParse(response: HTTPURLResponse, data: Data) -> Bool {
+        return true
+    }
+    
+    public func parse(data: Data) throws -> String {
+        guard let string = String(data: data, encoding: .utf16) else {
+            throw StringResponseError.decodeFailed
+        }
+        return string
+    }
+}

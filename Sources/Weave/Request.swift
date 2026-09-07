@@ -57,29 +57,29 @@ public class Request<T: ResponseType> {
         return self
     }
     
-    public func start() async throws(RequestErrorCode) -> T.ResponseClass {
+    public func start() async throws(RequestError) -> T.ResponseClass {
         do {
             let (data, resBasic) = try await self.session.data(for: self.urlRequest)
             let response = resBasic as! HTTPURLResponse
             let parser = T()
             if !parser.canParse(response: response, data: data) {
-                throw RequestError(errorType: .parseIneligible, description: "Cannot use requested parser.")
+                throw RequestErrorPayload(errorType: .parseIneligible, description: "Cannot use requested parser.")
             }
             if response.statusCode < 300 {
                 guard let parsed = try? parser.parse(data: data) else {
-                    throw RequestErrorCode.parseError(data)
+                    throw RequestError.parseError(data)
                 }
                 return parsed
             } else {
-                throw RequestErrorCode
+                throw RequestError
                     .fromCode(code: response.statusCode, data: data)
             }
         } catch let error as URLError {
-            throw RequestErrorCode.urlSessionError(error)
-        } catch let error as RequestErrorCode {
+            throw RequestError.urlSessionError(error)
+        } catch let error as RequestError {
             throw error
         } catch {
-            throw RequestErrorCode.unknownError(error)
+            throw RequestError.unknownError(error)
         }
     }
 }
@@ -90,7 +90,7 @@ public struct Response<T> {
     public var raw: Data
 }
 
-public struct RequestError: Error {
+public struct RequestErrorPayload: Error {
     var errorType: RequestErrorType
     var description: String
 }
@@ -105,7 +105,7 @@ public enum RequestMethod: String {
     case get = "GET", post = "POST", patch = "PATCH", put = "PUT", delete = "DELETE"
 }
 
-public enum RequestErrorCode: Error {
+public enum RequestError: LocalizedError {
     case unauthorized(Data),
          paymentRequied(Data),
          forbidden(Data),
@@ -125,8 +125,62 @@ public enum RequestErrorCode: Error {
          otherCode(Int, Data),
          parseError(Data),
          unknownError(Error)
+
+    public var errorDescription: String? {
+        guard let data = serverMessageData(), !data.isEmpty else {
+            return summary
+        }
+
+        let body = String(decoding: data, as: UTF8.self)
+        let preview = body.prefix(1_000)
+        let suffix = preview.endIndex < body.endIndex ? "…" : ""
+        return "\(summary)\nResponse body: \(preview)\(suffix)"
+    }
+
+    private var summary: String {
+        switch self {
+        case .unauthorized:
+            return "Authentication is required to complete this request (HTTP 401)."
+        case .paymentRequied:
+            return "Payment is required to complete this request (HTTP 402)."
+        case .forbidden:
+            return "You do not have permission to access this resource (HTTP 403)."
+        case .notFound:
+            return "The requested resource could not be found (HTTP 404)."
+        case .methodNotAllowed:
+            return "The server does not allow this request method for the resource (HTTP 405)."
+        case .notAcceptable:
+            return "The server cannot provide a response in an acceptable format (HTTP 406)."
+        case .proxyAuthRequired:
+            return "The proxy requires authentication (HTTP 407)."
+        case .requestTimeout:
+            return "The server timed out waiting for the request (HTTP 408)."
+        case .conflict:
+            return "The request conflicts with the current state of the resource (HTTP 409)."
+        case .gone:
+            return "The requested resource is no longer available (HTTP 410)."
+        case .lengthRequired:
+            return "The server requires a content length for this request (HTTP 411)."
+        case .preconditionFailed:
+            return "A precondition for the request was not met (HTTP 412)."
+        case .contentTooLarge:
+            return "The request body is too large for the server (HTTP 413)."
+        case .uriTooLong:
+            return "The request URL is too long for the server (HTTP 414)."
+        case .unsupportedMediaType:
+            return "The server does not support the request's content type (HTTP 415)."
+        case .urlSessionError(let error):
+            return "The network request failed: \(error.localizedDescription)"
+        case .otherCode(let code, _):
+            return "The server returned HTTP \(code): \(HTTPURLResponse.localizedString(forStatusCode: code))."
+        case .parseError:
+            return "The server response could not be parsed into the expected format."
+        case .unknownError(let error):
+            return "The request failed: \(error.localizedDescription)"
+        }
+    }
     
-    static func fromCode(code: Int, data: Data) -> RequestErrorCode {
+    static func fromCode(code: Int, data: Data) -> RequestError {
         switch code {
         case 401:
             return .unauthorized(data)
